@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { type NextRequest } from 'next/server'
-import { IMG_IDCARD, IMG_CHAR1 } from '~/images'
+import { IMG_IDCARD } from '~/images'
 
 export const runtime = 'edge'
 
@@ -12,6 +12,13 @@ export async function GET(request: NextRequest) {
   const name: string = 'akira.cel'
   const rank: string = 'Noob'
   const score: string = '1000 / 10000'
+
+  const imgChar1 = await fetch(
+    new URL(
+      '../../../../../packages/shared/assets/og/char1.png',
+      import.meta.url
+    )
+  ).then((res) => res.arrayBuffer())
 
   return new ImageResponse(
     (
@@ -36,7 +43,7 @@ export async function GET(request: NextRequest) {
             marginLeft: '182',
           }}
         >
-          <img src={IMG_CHAR1} />
+          <img src={imgChar1} />
         </div>
         <div
           style={{
