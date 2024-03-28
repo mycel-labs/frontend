@@ -6,6 +6,8 @@ import {
 } from '@/components/ui/tabs'
 import ImgEnoki from '@/assets/enoki.svg'
 import { useVault } from '@/hooks/useVault'
+import { convertToDecimalString } from '@/lib/coin'
+import { convertUnixToUTC } from '@/lib/converter'
 import {
   useFirebaseFunction,
   useGetIndividualLeaderBoard,
@@ -119,7 +121,8 @@ const TabsContent = ({ ...props }) => (
 )
 
 const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
-  const { drawData, poolBalance, availableYield } = useVault()
+  const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
+    useVault()
   const rows = tlb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
@@ -138,18 +141,32 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
             <li>
               <div className="header">Pool Value</div>
               <div className="text-right text-3xl font-bold">
-                ${poolBalance}
+                $
+                {convertToDecimalString(
+                  poolbalanceData?.data,
+                  decimals?.data
+                ) || '0'}
               </div>
             </li>
             <li>
               <div className="header">Total Estimated Reward</div>
               <div className="text-right text-3xl font-bold">
-                ${availableYield || '0'}
+                $
+                {convertToDecimalString(
+                  availableYieldData?.data,
+                  decimals?.data
+                ) || '0'}
               </div>
             </li>
             <li>
               <div className="header">Payout Date</div>
-              <div className="text-right text-3xl font-bold">{drawData}</div>
+              {currentDrawData?.data == BigInt(0) ? (
+                <div className="text-right text-3xl font-bold">not started</div>
+              ) : (
+                <div className="text-right text-3xl font-bold">
+                  {convertUnixToUTC(currentDrawData?.data)}
+                </div>
+              )}
             </li>
           </ul>
         </div>

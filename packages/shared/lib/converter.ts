@@ -1,4 +1,4 @@
-export const convertUnixToUTC = (unixTimestamp: BigInt): string => {
+export const convertUnixToUTC = (unixTimestamp: bigint): string => {
   // Create a new Date object using the UNIX timestamp
   // The BigInt needs to be converted to a number, and multiplied by 1000 to convert seconds to milliseconds
   const date = new Date(Number(unixTimestamp) * 1000)

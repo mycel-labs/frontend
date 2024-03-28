@@ -2,13 +2,14 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import Profile from '~/components/Profile'
 import { Link } from '@tanstack/react-router'
 import { useVault } from '@/hooks/useVault'
+import { convertToDecimalString } from '@/lib/coin'
 
 export const Route = createLazyFileRoute('/_app/home')({
   component: Home,
 })
 
 function Home() {
-  const { depositedAmount, availableYield } = useVault()
+  const { depositedAmountData, availableYieldData, decimals } = useVault()
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">
@@ -18,13 +19,21 @@ function Home() {
           <li>
             <div className="header">Estimated Reward</div>
             <div className="text-right text-3xl font-bold">
-              ${availableYield || '0'}
+              $
+              {convertToDecimalString(
+                availableYieldData?.data,
+                decimals.data
+              ) || '0'}
             </div>
           </li>
           <li>
             <div className="header">Deposited USDC</div>
             <div className="text-right text-3xl font-bold">
-              ${depositedAmount || '0'}
+              $
+              {convertToDecimalString(
+                depositedAmountData?.data,
+                decimals?.data
+              ) || '0'}
             </div>
           </li>
         </ul>
