@@ -4,8 +4,10 @@ import { env } from '@/lib/env'
 import {
   useFirebaseFunction,
   useGetUserByReferralCode,
-} from '~/hooks/useReferral'
-import { User } from '~/types/referral'
+} from '@/hooks/useReferral'
+import { copyClipboard } from '@/lib/utils'
+import { User } from '@/types/referral'
+import { SPORE_SHARE_URL } from '@/constants/spore'
 
 export const Route = createLazyFileRoute('/_app/referral')({
   component: Referral,
@@ -13,6 +15,7 @@ export const Route = createLazyFileRoute('/_app/referral')({
 
 function Referral() {
   const code = 'REFERRAL_CODE'
+  const referralUrl: string = `${SPORE_SHARE_URL}?ref=${code}`
   const fns = useFirebaseFunction({
     projectId: env.firebaseProjectId,
     apiKey: env.firebaseAPIKey,
@@ -20,6 +23,7 @@ function Referral() {
   const { data, isLoading } = useGetUserByReferralCode(fns, code)
   const invitedUserCount =
     !isLoading && data ? (data as { user: User })?.user?.invitedUserCount : 0
+
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl pb-8">
@@ -43,13 +47,16 @@ function Referral() {
         <div className="px-6 mb-2 mt-8">
           <input
             type="text"
-            value={`https://spore.xxxx/?invite=${code}`}
+            value={referralUrl}
             readOnly
             className="w-full font-lg font-title"
           />
           <button
             className="btn bg-secondary h-14 px-10 font-bold font-title w-full mt-4"
-            onClick={() => toast('URL Copied!')}
+            onClick={() => {
+              copyClipboard(referralUrl)
+              toast('URL Copied!')
+            }}
           >
             <span className="btn-inner" />
             Copy referral url

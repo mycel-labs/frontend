@@ -23,13 +23,13 @@ export const wagmiConfig = createConfig({
   ],
   transports: {
     [mainnet.id]: http(
-      `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.ALCHEMY_KEY}`,
+      `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
       {
         key: 'alchemy',
       }
     ),
     [optimismSepolia.id]: http(
-      `https://opt-sepolia.g.alchemy.com/v2/OD55mXWKlbSDgXvAxIX12CulVWP2iIDh`,
+      `https://opt-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
       {
         key: 'alchemy',
       }

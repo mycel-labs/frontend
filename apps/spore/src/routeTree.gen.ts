@@ -13,13 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SImport } from './routes/s'
 import { Route as AppImport } from './routes/_app'
+import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
 const StartLazyImport = createFileRoute('/start')()
-const IndexLazyImport = createFileRoute('/')()
 const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
 const AppReferralLazyImport = createFileRoute('/_app/referral')()
@@ -34,17 +33,12 @@ const StartLazyRoute = StartLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/start.lazy').then((d) => d.Route))
 
-const SRoute = SImport.update({
-  path: '/s',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AppRoute = AppImport.update({
   id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
@@ -84,15 +78,11 @@ const AppAboutLazyRoute = AppAboutLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_app': {
       preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
-    }
-    '/s': {
-      preLoaderRoute: typeof SImport
       parentRoute: typeof rootRoute
     }
     '/start': {
@@ -129,7 +119,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexLazyRoute,
+  IndexRoute,
   AppRoute.addChildren([
     AppAboutLazyRoute,
     AppBoardLazyRoute,
@@ -138,7 +128,6 @@ export const routeTree = rootRoute.addChildren([
     AppSettingLazyRoute,
     AppVaultsLazyRoute,
   ]),
-  SRoute,
   StartLazyRoute,
 ])
 

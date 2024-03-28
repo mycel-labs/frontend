@@ -33,7 +33,6 @@ function Setting() {
   const { disconnectWallet } = useWallet()
   const navigate = useNavigate()
 
-
   const handleSignout = async (): Promise<void> => {
     await disconnectWallet()
     navigate({ to: '/' })
@@ -44,11 +43,11 @@ function Setting() {
       <div className="bg-light overlay-dot-ll rounded-xl py-8">
         <h2 className="centerline font-bold text-3xl">Setting</h2>
         <Profile />
-        <div className="space-y-6 py-6 px-6">
+        {/* <div className="space-y-6 py-6 px-6">
           {MENU_ITEMS.map((item) => (
             <ListItem key={item.id} item={item} />
           ))}
-        </div>
+        </div> */}
         <ul className="list-table mx-4 sm:mx-6 mt-6 bg-light">
           {mycelAddress && (
             <li>
